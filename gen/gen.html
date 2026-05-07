@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="GENCR - AI Gaming Name Generator - Generate unique gaming usernames with AI"
+    />
+    <title>GENCR - AI Gaming Name Generator</title>
+    <style>
+      /* Base Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:
+          "Inter",
+          "Segoe UI",
+          "Roboto",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+      }
+
+      /* Background Gradient */
+      body {
+        background: linear-gradient(
+          135deg,
+          #0f172a 0%,
+          #1e1b4b 30%,
+          #0f172a 70%,
+          #1e1b4b 100%
+        );
+        min-height: 100vh;
+        color: #e2e8f0;
+        padding: 40px 20px;
+        max-width: 720px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(168, 85, 247, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(16, 185, 129, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 50% 50%,
+            rgba(168, 85, 247, 0.05) 0%,
+            transparent 70%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Title Style */
+      .title-wrapper {
+        text-align: center;
+        margin-bottom: 50px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .title {
+        font-size: clamp(2.5rem, 8vw, 4rem);
+        margin: 0 0 16px 0;
+        background: linear-gradient(
+          135deg,
+          #a855f7 0%,
+          #c084fc 50%,
+          #10b981 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 800;
+        letter-spacing: -2px;
+        text-shadow: 0 0 60px rgba(168, 85, 247, 0.5);
+        position: relative;
+      }
+
+      .title::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #a855f7, transparent);
+        border-radius: 2px;
+      }
+
+      .subtitle {
+        font-size: clamp(1rem, 3vw, 1.25rem);
+        color: #94a3b8;
+        font-weight: 400;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      /* Main Container */
+      .container {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(20px);
+        padding: 50px;
+        border-radius: 28px;
+        box-shadow:
+          0 30px 60px -15px rgba(0, 0, 0, 0.6),
+          0 0 60px rgba(168, 85, 247, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(168, 85, 247, 0.25);
+        position: relative;
+        z-index: 1;
+      }
+
+      .container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(168, 85, 247, 0.5),
+          transparent
+        );
+        border-radius: 28px 28px 0 0;
+      }
+
+      /* Label Style */
+      label {
+        display: block;
+        margin-bottom: 16px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      /* Custom Dropdown Container */
+      .dropdown {
+        position: relative;
+        width: 100%;
+      }
+
+      /* Dropdown Trigger */
+      .dropdown-trigger {
+        width: 100%;
+        padding: 20px 24px;
+        border-radius: 16px;
+        background: rgba(51, 65, 85, 0.85);
+        color: #f1f5f9;
+        border: 1px solid rgba(168, 85, 247, 0.35);
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 2;
+        font-weight: 500;
+      }
+
+      .dropdown-trigger:hover {
+        border-color: #a855f7;
+        box-shadow: 0 0 30px rgba(168, 85, 247, 0.25);
+        background: rgba(51, 65, 85, 0.95);
+        transform: translateY(-1px);
+      }
+
+      .dropdown-trigger:focus {
+        outline: none;
+        border-color: #a855f7;
+        box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.15);
+      }
+
+      .dropdown-trigger.active {
+        border-color: #a855f7;
+        border-radius: 16px 16px 0 0;
+        box-shadow: 0 0 30px rgba(168, 85, 247, 0.35);
+        background: rgba(51, 65, 85, 0.95);
+      }
+
+      /* Dropdown Arrow */
+      .dropdown-arrow {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease;
+        stroke: #a855f7;
+        stroke-width: 2;
+        flex-shrink: 0;
+      }
+
+      .dropdown-arrow.open {
+        transform: rotate(180deg);
+      }
+
+      /* Dropdown Menu */
+      .dropdown-menu {
+        position: absolute;
+        top: calc(100% - 1px);
+        left: 0;
+        right: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(51, 65, 85, 0.98) 0%,
+          rgba(30, 41, 59, 0.98) 100%
+        );
+        border: 1px solid rgba(168, 85, 247, 0.3);
+        border-top: none;
+        border-radius: 0 0 12px 12px;
+        list-style: none;
+        padding: 8px 0;
+        margin: 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        z-index: 100;
+        box-shadow:
+          0 20px 40px rgba(0, 0, 0, 0.4),
+          0 0 30px rgba(168, 85, 247, 0.1);
+      }
+
+      .dropdown-menu.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      /* Dropdown Item */
+      .dropdown-item {
+        padding: 12px 18px;
+        color: #cbd5e1;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .dropdown-item:hover {
+        background: rgba(168, 85, 247, 0.15);
+        color: #f1f5f9;
+        padding-left: 22px;
+      }
+
+      .dropdown-item.selected {
+        background: rgba(168, 85, 247, 0.2);
+        color: #a855f7;
+        font-weight: 600;
+      }
+
+      .dropdown-item.selected::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        background: #a855f7;
+        border-radius: 50%;
+        display: block;
+      }
+
+      /* Hidden Input for value storage */
+      .dropdown-hidden {
+        display: none;
+      }
+
+      /* Generate Button */
+      .generate-btn {
+        width: 100%;
+        padding: 22px;
+        margin-top: 30px;
+        background: linear-gradient(
+          135deg,
+          #a855f7 0%,
+          #9333ea 50%,
+          #7c3aed 100%
+        );
+        color: white;
+        border: none;
+        border-radius: 16px;
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow:
+          0 8px 30px rgba(168, 85, 247, 0.45),
+          0 0 0 1px rgba(168, 85, 247, 0.2);
+        letter-spacing: 1px;
+      }
+
+      .generate-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: left 0.6s ease;
+      }
+
+      .generate-btn::after {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, #a855f7, #10b981);
+        border-radius: 16px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      .generate-btn:hover {
+        transform: translateY(-3px);
+        box-shadow:
+          0 12px 40px rgba(168, 85, 247, 0.55),
+          0 0 40px rgba(168, 85, 247, 0.2);
+      }
+
+      .generate-btn:hover::before {
+        left: 100%;
+      }
+
+      .generate-btn:hover::after {
+        opacity: 0.5;
+      }
+
+      .generate-btn:active {
+        transform: translateY(-1px);
+      }
+
+      .generate-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* Loading Animation */
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 0.8s linear infinite;
+        margin-right: 8px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .loading-text {
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+
+      /* Result Box */
+      .result {
+        margin-top: 35px;
+        padding: 35px;
+        background: rgba(51, 65, 85, 0.7);
+        border-radius: 20px;
+        min-height: 100px;
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+        text-align: center;
+        line-height: 1.6;
+        color: #f1f5f9;
+        font-weight: 700;
+        word-break: break-all;
+        transition: all 0.4s ease;
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        box-shadow:
+          0 8px 30px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        position: relative;
+      }
+
+      .result::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(16, 185, 129, 0.5),
+          transparent
+        );
+        border-radius: 20px 20px 0 0;
+      }
+
+      .result:hover {
+        border-color: rgba(16, 185, 129, 0.5);
+        box-shadow:
+          0 8px 30px rgba(0, 0, 0, 0.2),
+          0 0 30px rgba(16, 185, 129, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      }
+
+      /* Copy Button */
+      .copy-btn {
+        margin-top: 24px;
+        padding: 20px;
+        width: 100%;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        border-radius: 16px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow:
+          0 6px 25px rgba(16, 185, 129, 0.4),
+          0 0 0 1px rgba(16, 185, 129, 0.2);
+        display: none;
+        opacity: 0;
+        transform: translateY(15px);
+        letter-spacing: 0.5px;
+      }
+
+      .copy-btn.show {
+        display: block;
+        animation: fadeInUp 0.4s ease forwards;
+      }
+
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .copy-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .copy-btn:hover {
+        transform: translateY(-3px);
+        box-shadow:
+          0 10px 35px rgba(16, 185, 129, 0.5),
+          0 0 30px rgba(16, 185, 129, 0.2);
+      }
+
+      .copy-btn:hover::before {
+        left: 100%;
+      }
+
+      .copy-btn.copied {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      }
+
+      /* Toast Notification */
+      .toast {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 14px 24px;
+        border-radius: 12px;
+        color: #10b981;
+        font-weight: 500;
+        font-size: 14px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .toast-icon {
+        width: 18px;
+        height: 18px;
+        stroke: #10b981;
+        stroke-width: 2;
+      }
+
+      /* Google AdSense Placeholder */
+      .ad-space {
+        margin: 40px 0;
+        height: 140px;
+        background: rgba(30, 41, 59, 0.7);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #64748b;
+        font-size: 15px;
+        border: 1px dashed rgba(148, 163, 184, 0.3);
+        transition: all 0.4s ease;
+        position: relative;
+        z-index: 1;
+        backdrop-filter: blur(10px);
+      }
+
+      .ad-space:hover {
+        border-color: rgba(168, 85, 247, 0.4);
+        box-shadow: 0 0 30px rgba(168, 85, 247, 0.05);
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 640px) {
+        body {
+          padding: 25px 15px;
+        }
+
+        .container {
+          padding: 30px 20px;
+          border-radius: 20px;
+        }
+
+        .title-wrapper {
+          margin-bottom: 35px;
+        }
+
+        .title {
+          font-size: clamp(2rem, 10vw, 3rem);
+        }
+
+        .result {
+          padding: 25px;
+          font-size: clamp(1.5rem, 6vw, 2rem);
+        }
+
+        .generate-btn {
+          padding: 18px;
+          font-size: 18px;
+        }
+
+        .copy-btn {
+          padding: 16px;
+          font-size: 16px;
+        }
+
+        .dropdown-trigger {
+          padding: 16px 20px;
+          font-size: 16px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 20px 12px;
+        }
+
+        .container {
+          padding: 25px 15px;
+          border-radius: 16px;
+        }
+
+        .title-wrapper {
+          margin-bottom: 30px;
+        }
+
+        .title {
+          font-size: clamp(1.8rem, 10vw, 2.5rem);
+        }
+
+        .subtitle {
+          font-size: 0.875rem;
+        }
+
+        .result {
+          padding: 20px;
+          font-size: clamp(1.3rem, 5vw, 1.8rem);
+        }
+
+        .generate-btn {
+          padding: 16px;
+          font-size: 16px;
+        }
+
+        .copy-btn {
+          padding: 14px;
+          font-size: 15px;
+        }
+
+        .dropdown-trigger {
+          padding: 14px 18px;
+          font-size: 15px;
+        }
+
+        .ad-space {
+          height: 120px;
+          margin: 30px 0;
+        }
+      }
+
+      /* Smooth transitions for all interactive elements */
+      * {
+        transition-property:
+          background-color, border-color, color, box-shadow, transform, opacity;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="title-wrapper">
+      <h1 class="title">GENCR</h1>
+      <p class="subtitle">AI Gaming Name Generator</p>
+    </div>
+
+    <div class="container">
+      <label for="style">Choose Style</label>
+      <div class="dropdown">
+        <div class="dropdown-trigger" id="dropdown-trigger">
+          <span id="selected-style">Cool</span>
+          <svg
+            class="dropdown-arrow"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M6 8l4 4 4-4" />
+          </svg>
+        </div>
+        <ul class="dropdown-menu" id="dropdown-menu">
+          <li class="dropdown-item selected" data-value="Cool">Cool</li>
+          <li class="dropdown-item" data-value="Cute">Cute</li>
+          <li class="dropdown-item" data-value="Cyber">Cyber</li>
+          <li class="dropdown-item" data-value="Dark">Dark</li>
+          <li class="dropdown-item" data-value="Minimal">Minimal</li>
+        </ul>
+        <input type="hidden" id="style" class="dropdown-hidden" value="Cool" />
+      </div>
+
+      <button class="generate-btn" onclick="generateName()" id="generateBtn">
+        Generate AI Name
+      </button>
+
+      <!-- AI Generated Result -->
+      <div class="result" id="result">
+        <span class="loading-text">Waiting for generation...</span>
+      </div>
+
+      <button class="copy-btn" onclick="copyResult()" id="copyBtn">
+        Copy Name
+      </button>
+    </div>
+
+    <!-- Google AdSense Placeholder -->
+    <div class="ad-space">
+      <span>Google AdSense Placeholder</span>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+      <svg
+        class="toast-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>Copied to clipboard!</span>
+    </div>
+
+    <script>
+      // Custom Dropdown Functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const dropdownTrigger = document.getElementById("dropdown-trigger");
+        const dropdownMenu = document.getElementById("dropdown-menu");
+        const dropdownArrow = dropdownTrigger.querySelector(".dropdown-arrow");
+        const selectedStyle = document.getElementById("selected-style");
+        const hiddenInput = document.getElementById("style");
+        const dropdownItems = dropdownMenu.querySelectorAll(".dropdown-item");
+
+        // Toggle dropdown on trigger click
+        dropdownTrigger.addEventListener("click", function (e) {
+          e.stopPropagation();
+          dropdownMenu.classList.toggle("open");
+          dropdownArrow.classList.toggle("open");
+          dropdownTrigger.classList.toggle("active");
+        });
+
+        // Select item
+        dropdownItems.forEach(function (item) {
+          item.addEventListener("click", function (e) {
+            e.stopPropagation();
+
+            // Update selected state
+            dropdownItems.forEach(function (i) {
+              i.classList.remove("selected");
+            });
+            item.classList.add("selected");
+
+            // Update display and hidden input
+            const value = item.dataset.value;
+            selectedStyle.textContent = value;
+            hiddenInput.value = value;
+
+            // Close dropdown
+            dropdownMenu.classList.remove("open");
+            dropdownArrow.classList.remove("open");
+            dropdownTrigger.classList.remove("active");
+          });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function () {
+          dropdownMenu.classList.remove("open");
+          dropdownArrow.classList.remove("open");
+          dropdownTrigger.classList.remove("active");
+        });
+
+        // Close dropdown on ESC key
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") {
+            dropdownMenu.classList.remove("open");
+            dropdownArrow.classList.remove("open");
+            dropdownTrigger.classList.remove("active");
+          }
+        });
+      });
+
+      async function generateName() {
+        const style = document.getElementById("style").value;
+        const resultBox = document.getElementById("result");
+        const copyBtn = document.getElementById("copyBtn");
+        const generateBtn = document.getElementById("generateBtn");
+
+        // Update UI state
+        resultBox.innerHTML =
+          '<span class="loading-text">AI is generating</span><span class="loading-spinner"></span>';
+        copyBtn.classList.remove("show");
+        generateBtn.disabled = true;
+        generateBtn.innerHTML =
+          '<span class="loading-spinner"></span>Generating...';
+
+        try {
+          // 调用安全的后端代理，而不是直接请求 DeepSeek
+          const response = await fetch("/api/generate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ style }),
+          });
+
+          const data = await response.json();
+          const name = data.name || "Generation failed";
+          resultBox.textContent = name;
+          copyBtn.classList.add("show");
+        } catch (err) {
+          resultBox.textContent = "Generation failed, please try again";
+        } finally {
+          // Reset button state
+          generateBtn.disabled = false;
+          generateBtn.innerHTML = "Generate AI Name";
+        }
+      }
+
+      // Copy to clipboard function
+      function copyResult() {
+        const text = document.getElementById("result").textContent;
+        const copyBtn = document.getElementById("copyBtn");
+        const toast = document.getElementById("toast");
+
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            // Show toast notification
+            toast.classList.add("show");
+
+            // Update copy button state
+            copyBtn.textContent = "Copied!";
+            copyBtn.classList.add("copied");
+
+            // Hide toast after 2 seconds
+            setTimeout(() => {
+              toast.classList.remove("show");
+            }, 2000);
+
+            // Reset button after 1 second
+            setTimeout(() => {
+              copyBtn.textContent = "Copy Name";
+              copyBtn.classList.remove("copied");
+            }, 1000);
+          })
+          .catch(() => {
+            // Fallback for older browsers
+            alert("Failed to copy, please try again");
+          });
+      }
+    </script>
+  </body>
+</html>
