@@ -8,9 +8,6 @@
       content="GENCR - AI Gaming Name Generator - Generate unique gaming usernames with AI"
     />
     <title>GENCR - AI Gaming Name Generator</title>
-    <meta name="description" content="Generate AI-powered text, images, and content for free with Gencr AI. Fast, easy, and no signup required.">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2602482767132719"
-     crossorigin="anonymous"></script>
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' style='stop-color:%23a855f7'/><stop offset='100%25' style='stop-color:%2310b981'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='%230f172a'/><text x='16' y='24' font-family='Arial, sans-serif' font-size='18' font-weight='bold' fill='url(%23g)' text-anchor='middle'>G</text></svg>"
@@ -671,6 +668,169 @@
           background-color, border-color, color, box-shadow, transform, opacity;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       }
+
+      /* Welcome Popup Styles */
+      .welcome-popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.4s ease,
+          visibility 0.4s ease;
+      }
+
+      .welcome-popup-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .welcome-popup {
+        background: linear-gradient(145deg, #1e1b4b 0%, #0f172a 100%);
+        border: 1px solid rgba(168, 85, 247, 0.3);
+        border-radius: 20px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+        box-shadow:
+          0 0 60px rgba(168, 85, 247, 0.2),
+          0 25px 50px rgba(0, 0, 0, 0.5);
+        transform: scale(0.9) translateY(20px);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .welcome-popup-overlay.show .welcome-popup {
+        transform: scale(1) translateY(0);
+      }
+
+      .welcome-popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 28px;
+        border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+      }
+
+      .welcome-popup-header h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #a855f7, #10b981);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .welcome-popup-close {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        color: #94a3b8;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .welcome-popup-close:hover {
+        background: rgba(239, 68, 68, 0.2);
+        border-color: rgba(239, 68, 68, 0.5);
+        color: #ef4444;
+        transform: rotate(90deg);
+      }
+
+      .welcome-popup-content {
+        padding: 24px 28px;
+      }
+
+      .welcome-section {
+        margin-bottom: 20px;
+      }
+
+      .welcome-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .welcome-section h3 {
+        font-size: 1rem;
+        color: #a855f7;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .welcome-section p {
+        font-size: 0.9rem;
+        color: #94a3b8;
+        line-height: 1.6;
+      }
+
+      .welcome-section ol {
+        margin: 0;
+        padding-left: 20px;
+        color: #94a3b8;
+        font-size: 0.9rem;
+        line-height: 1.8;
+      }
+
+      .welcome-section ol li {
+        margin-bottom: 4px;
+      }
+
+      .welcome-popup-btn {
+        display: block;
+        width: calc(100% - 56px);
+        margin: 0 28px 24px;
+        padding: 14px 24px;
+        background: linear-gradient(135deg, #a855f7, #10b981);
+        border: none;
+        border-radius: 12px;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+      }
+
+      .welcome-popup-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);
+      }
+
+      @media (max-width: 480px) {
+        .welcome-popup-header {
+          padding: 20px 22px;
+        }
+
+        .welcome-popup-header h2 {
+          font-size: 1.25rem;
+        }
+
+        .welcome-popup-content {
+          padding: 20px 22px;
+        }
+
+        .welcome-popup-btn {
+          width: calc(100% - 44px);
+          margin: 0 22px 20px;
+          padding: 12px 20px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -868,6 +1028,69 @@
             alert("Failed to copy, please try again");
           });
       }
+
+      // Welcome Popup Functions
+      function showWelcomePopup() {
+        const popup = document.getElementById("welcomePopup");
+        if (popup) {
+          popup.classList.add("show");
+        }
+      }
+
+      function hideWelcomePopup() {
+        const popup = document.getElementById("welcomePopup");
+        if (popup) {
+          popup.classList.remove("show");
+          localStorage.setItem("welcomePopupDismissed", "true");
+        }
+      }
+
+      // Check if popup was already dismissed
+      if (!localStorage.getItem("welcomePopupDismissed")) {
+        window.addEventListener("load", showWelcomePopup);
+      }
     </script>
+
+    <!-- Welcome Popup Overlay -->
+    <div id="welcomePopup" class="welcome-popup-overlay">
+      <div class="welcome-popup">
+        <div class="welcome-popup-header">
+          <h2>Welcome to GENCR</h2>
+          <button class="welcome-popup-close" onclick="hideWelcomePopup()">
+            ×
+          </button>
+        </div>
+        <div class="welcome-popup-content">
+          <div class="welcome-section">
+            <h3>✨ About Us</h3>
+            <p>
+              Free AI-powered gaming name generator. Instantly create unique
+              usernames for any game —霸气, cute, ancient style, minimalist,
+              couples, or niche premium names. No registration needed,
+              completely free!
+            </p>
+          </div>
+          <div class="welcome-section">
+            <h3>🔒 Privacy Policy</h3>
+            <p>
+              We don't collect any personal information. Your inputs are only
+              used for real-time name generation — never saved, uploaded, or
+              shared. No ads, no bundled downloads, no hidden payments.
+            </p>
+          </div>
+          <div class="welcome-section">
+            <h3>📖 How to Use</h3>
+            <ol>
+              <li>Select your desired name style</li>
+              <li>Click "Generate AI Name"</li>
+              <li>Copy your favorite name and start gaming!</li>
+            </ol>
+          </div>
+        </div>
+        <button class="welcome-popup-btn" onclick="hideWelcomePopup()">
+          Get Started
+        </button>
+      </div>
+    </div>
   </body>
 </html>
